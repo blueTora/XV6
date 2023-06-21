@@ -112,6 +112,12 @@ found:
   memset(p->context, 0, sizeof *p->context);
   p->context->eip = (uint)forkret;
 
+  acquire(&ptable.lock);
+
+  p->createTime = ticks;
+
+  release(&ptable.lock);
+
   return p;
 }
 
@@ -198,6 +204,7 @@ fork(void)
   }
   np->sz = curproc->sz;
   np->parent = curproc;
+  
   *np->tf = *curproc->tf;
 
   // Clear %eax so that fork returns 0 in the child.
@@ -531,4 +538,41 @@ procdump(void)
     }
     cprintf("\n");
   }
+}
+
+int 
+getProcTick(int pid)
+{
+  struct proc *p;
+  int res = -1;
+
+  acquire(&ptable.lock);
+  
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    if(p->pid == pid){
+      res = ticks - p->createTime;
+      break;
+    }
+  }
+  
+  release(&ptable.lock);
+  return res;
+}
+
+unsigned short
+cal_procs(){
+  unsigned short procs = 0;
+  struct proc *p;
+  
+  acquire(&ptable.lock);
+  
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    if(p->state != UNUSED) {
+      procs++;
+    }
+  }
+
+  release(&ptable.lock);
+  
+  return procs;
 }

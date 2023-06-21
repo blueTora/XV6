@@ -79,6 +79,8 @@ kfree(char *v)
 // Allocate one 4096-byte page of physical memory.
 // Returns a pointer that the kernel can use.
 // Returns 0 if the memory cannot be allocated.
+unsigned long usedram = 0;
+
 char*
 kalloc(void)
 {
@@ -87,10 +89,38 @@ kalloc(void)
   if(kmem.use_lock)
     acquire(&kmem.lock);
   r = kmem.freelist;
-  if(r)
+  if(r){
     kmem.freelist = r->next;
+    usedram++;
+  }
   if(kmem.use_lock)
     release(&kmem.lock);
   return (char*)r;
 }
 
+unsigned long
+cal_freeram(void)
+{
+  struct run *r;
+  unsigned long freeram = 0;
+
+  r = kmem.freelist;
+  
+  acquire(&kmem.lock);
+  
+  while(r){
+    freeram += PGSIZE;
+    r = r->next;
+  }
+  
+  release(&kmem.lock);
+  
+  return freeram;
+}
+
+unsigned long
+get_usedram(void)
+{
+  const int pg = 4096;
+  return (unsigned long)(usedram * pg);
+}

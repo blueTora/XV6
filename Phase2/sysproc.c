@@ -6,6 +6,7 @@
 #include "memlayout.h"
 #include "mmu.h"
 #include "proc.h"
+#include "sysinfo.h"
 
 int
 sys_fork(void)
@@ -88,4 +89,35 @@ sys_uptime(void)
   xticks = ticks;
   release(&tickslock);
   return xticks;
+}
+
+int
+sys_getProcTick(void)
+{
+  int pid;
+  if(argint(0, &pid) < 0)
+    return -1;
+
+  return getProcTick(pid);
+}
+
+int
+sys_sysinfo(void)
+{
+  struct sysinfo *info;
+  const int secPerTick = 10;     // each tick is 10 ms
+  const uint bytePerPS = 4096;      // eack PageSize is 4096 (= 212) bytes long (4KB)
+  // xv6 uses 32-bit virtual addresses, resulting in a virtual address space of 4GB.
+  unsigned long freeram;
+
+  if(argptr(0, (void*)&info, sizeof(*info)) < 0)// argaddr
+    return -1;
+
+  info->uptime = (long)(ticks * secPerTick);
+  freeram = (unsigned long)(cal_freeram() * bytePerPS);
+  info->totalram =  freeram + get_usedram();
+  info->freeram = freeram;
+  info->procs = cal_procs();
+
+  return 0;
 }

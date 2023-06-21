@@ -68,6 +68,8 @@ char*           kalloc(void);
 void            kfree(char*);
 void            kinit1(void*, void*);
 void            kinit2(void*, void*);
+unsigned long   cal_freeram(void);
+unsigned long   get_usedram(void);
 
 // kbd.c
 void            kbdintr(void);
@@ -120,6 +122,8 @@ void            userinit(void);
 int             wait(void);
 void            wakeup(void*);
 void            yield(void);
+int             getProcTick(int);
+unsigned short  cal_procs(void);
 
 // swtch.S
 void            swtch(struct context**, struct context*);
