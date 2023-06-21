@@ -89,3 +89,17 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+// My System calls for OS Project - Phase 1
+int 
+sys_getProcCount(void)
+{
+  return getProcCount();
+}
+
+// return the how many times the read system call was called
+int 
+sys_getReadCount(void)
+{
+  return myproc()->readCounter;
+}

@@ -86,6 +86,7 @@ allocproc(void)
   return 0;
 
 found:
+  p->readCounter = 0;
   p->state = EMBRYO;
   p->pid = nextpid++;
 
@@ -531,4 +532,25 @@ procdump(void)
     }
     cprintf("\n");
   }
+}
+
+// My funcions for OS Project - Phase 1
+// return the number of the executing processes
+int 
+getProcCount(void)
+{
+  struct proc *p;
+  int count = 0;
+
+  acquire(&ptable.lock);
+
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
+  {
+     if(p->state != UNUSED)
+        count++;
+  }
+
+  release(&ptable.lock);
+
+  return count;
 }
