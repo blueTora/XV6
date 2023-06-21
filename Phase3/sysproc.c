@@ -89,3 +89,61 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+// My System calls for OS Project - Phase 1
+int 
+sys_getProcCount(void)
+{
+  return getProcCount();
+}
+
+// return the how many times the read system call was called
+int 
+sys_getReadCount(void)
+{
+  return myproc()->readCounter;
+}
+
+// My System calls for OS Project - Phase 2
+
+int
+sys_unit0_operation(void)
+{
+  return unit0_operation();
+}
+
+int
+sys_unit1_operation(void)
+{
+  return unit1_operation();
+}
+
+int
+sys_unit2_operation(void)
+{
+  return unit2_operation();
+}
+
+int
+sys_unit3_operation(void)
+{
+  return unit3_operation();
+}
+
+int
+sys_thread_clone(void)
+{
+  char* stack;
+  
+  int temp = argptr(0, &stack, sizeof stack);
+  if(temp < 0)
+    return -1;
+
+  return thread_clone((void*) stack);
+}
+
+int
+sys_thread_join(void)
+{
+  return thread_join();
+}

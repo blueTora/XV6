@@ -7,6 +7,9 @@
 #include "x86.h"
 #include "syscall.h"
 
+// Sum of All the Read Counts
+int countRead = 0;
+
 // User code makes a system call with INT T_SYSCALL.
 // System call number in %eax.
 // Arguments on the stack, from the user call to the C
@@ -103,6 +106,14 @@ extern int sys_unlink(void);
 extern int sys_wait(void);
 extern int sys_write(void);
 extern int sys_uptime(void);
+extern int sys_getProcCount(void);
+extern int sys_getReadCount(void);
+extern int sys_unit0_operation(void);
+extern int sys_unit1_operation(void);
+extern int sys_unit2_operation(void);
+extern int sys_unit3_operation(void);
+extern int sys_thread_join(void);
+extern int sys_thread_clone(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -126,6 +137,14 @@ static int (*syscalls[])(void) = {
 [SYS_link]    sys_link,
 [SYS_mkdir]   sys_mkdir,
 [SYS_close]   sys_close,
+[SYS_getProcCount] sys_getProcCount,
+[SYS_getReadCount] sys_getReadCount,
+[SYS_unit0_operation] sys_unit0_operation,
+[SYS_unit1_operation] sys_unit1_operation,
+[SYS_unit2_operation] sys_unit2_operation,
+[SYS_unit3_operation] sys_unit3_operation,
+[SYS_thread_clone] sys_thread_clone,
+[SYS_thread_join] sys_thread_join,
 };
 
 void
@@ -135,6 +154,16 @@ syscall(void)
   struct proc *curproc = myproc();
 
   num = curproc->tf->eax;
+
+  // Counting the Read SysCalls
+  if (num == SYS_getReadCount){
+    curproc->readCounter = countRead;
+  }
+
+  if (num == SYS_read){
+    countRead++;
+  }
+
   if(num > 0 && num < NELEM(syscalls) && syscalls[num]) {
     curproc->tf->eax = syscalls[num]();
   } else {

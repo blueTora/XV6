@@ -120,6 +120,14 @@ void            userinit(void);
 int             wait(void);
 void            wakeup(void*);
 void            yield(void);
+int             getProcCount(void);
+int             getReadCount(void);
+int             unit0_operation(void);
+int             unit1_operation(void);
+int             unit2_operation(void);
+int             unit3_operation(void);
+int             thread_clone(void*);
+int             thread_join(void);
 
 // swtch.S
 void            swtch(struct context**, struct context*);

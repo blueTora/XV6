@@ -23,6 +23,14 @@ int getpid(void);
 char* sbrk(int);
 int sleep(int);
 int uptime(void);
+int getProcCount(void);
+int getReadCount(void);
+int unit0_operation(void);
+int unit1_operation(void);
+int unit2_operation(void);
+int unit3_operation(void);
+int thread_join(void);
+int thread_clone(void*);
 
 // ulib.c
 int stat(const char*, struct stat*);
@@ -37,3 +45,4 @@ void* memset(void*, int, uint);
 void* malloc(uint);
 void free(void*);
 int atoi(const char*);
+int thread_create(void (*fn) (void *), void *arg);
