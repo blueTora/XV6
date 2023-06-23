@@ -68,7 +68,27 @@ The following system calls have been implemented to support the waiting queue, d
 
 - `int unit0_operation()`, `int unit1_operation()`, `int unit2_operation()`, and `int unit3_operation()`:
 
+### Unit Operations
+
   These system calls implement unit operations that perform specific tasks or operations within XV6. Each unit operation serves a distinct purpose and contributes to the overall functionality of the operating system.
+
+- `unit0_operation()`
+
+The `unit0_operation()` system call performs a specific operation on a value within XV6. It adds 7 to the value and then applies the modulo operation by M. This operation can be used for various purposes, such as transforming or manipulating data in a controlled manner.
+
+- `unit1_operation()`
+
+The `unit1_operation()` system call multiplies a value within XV6 by 2 and then applies the modulo operation by M. Similar to `unit0_operation()`, this operation allows for controlled data manipulation by scaling the value and ensuring it stays within defined bounds.
+
+- `unit2_operation()`
+
+The `unit2_operation()` system call multiplies a value within XV6 by 3 and then applies the modulo operation by M. This operation is another form of controlled data manipulation, effectively scaling the value by a factor of 3 while keeping it within the specified range.
+
+- `unit3_operation()`
+
+The `unit3_operation()` system call prints out the value it receives as input. This operation provides a means to display or log the value for debugging or informational purposes. It can be used to track the progress or state of the system during execution.
+
+These unit operations offer flexibility and extend the capabilities of XV6. By utilizing them in your programs or system utilities, you can perform various computations, transformations, and observations based on the specific requirements of your project.
 
 ## Acknowledgments
 
